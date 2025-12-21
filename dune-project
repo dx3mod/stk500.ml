@@ -1,4 +1,4 @@
-(lang dune 3.20)
+(lang dune 3.6)
 
 (name stk500)
 
@@ -15,7 +15,7 @@
 
 (package
  (name stk500)
- (synopsis "Stk500 programmer implementation")
+ (synopsis "Stk500 programmer")
  ;  (description "A longer description")
  (depends ocaml)
  (tags

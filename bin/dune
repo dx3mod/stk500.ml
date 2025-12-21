@@ -1,0 +1,5 @@
+(executable
+ (public_name stk500)
+ (name main)
+ (optional)
+ (libraries stk500 serialport.unix cmdliner))
