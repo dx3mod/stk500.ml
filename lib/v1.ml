@@ -15,11 +15,11 @@ module Message = struct
 end
 
 module Command = struct
-  type t = Cstruct.t
+  type t = bytes
 
   let make arr =
-    let bytes = Cstruct.create (Array.length arr) in
-    Array.iteri (Cstruct.set_uint8 bytes) arr;
+    let bytes = Bytes.create (Array.length arr) in
+    Array.iteri (Bytes.set_uint8 bytes) arr;
     bytes
 
   let sync = make Message.[| cmnd_stk_get_sync; sync_crc_eop |]
@@ -79,30 +79,30 @@ module Command = struct
     make Message.[| cmnd_stk_leave_prog_mode; sync_crc_eop |]
 
   let load_address addr =
-    let command = Cstruct.create 4 in
-    Cstruct.set_uint8 command 0 Message.cmnd_stk_load_address;
-    Cstruct.BE.set_uint16 command 1 addr;
-    Cstruct.set_uint8 command 3 Message.sync_crc_eop;
+    let command = Bytes.create 4 in
+    Bytes.set_uint8 command 0 Message.cmnd_stk_load_address;
+    Bytes.set_uint16_be command 1 addr;
+    Bytes.set_uint8 command 3 Message.sync_crc_eop;
     command
 
   let load_page payload =
-    let payload_len = Cstruct.length payload in
-    let command_len = 5 + Cstruct.length payload in
+    let payload_len = Bytes.length payload in
+    let command_len = 5 + Bytes.length payload in
     (* cmnd_stk_load_address (1 bytes) + payload_len (2 bytes) 
        + magic (1 bytes) + payload (payload_len bytes) + sync_crc_eop  *)
-    let command = Cstruct.create command_len in
-    Cstruct.set_uint8 command 0 Message.cmnd_stk_prog_page;
-    Cstruct.BE.set_uint16 command 1 payload_len;
-    Cstruct.set_uint8 command 3 0x46;
-    Cstruct.blit command 4 payload 0 payload_len;
-    Cstruct.set_uint8 command (4 + Cstruct.length payload) Message.sync_crc_eop;
+    let command = Bytes.create command_len in
+    Bytes.set_uint8 command 0 Message.cmnd_stk_prog_page;
+    Bytes.set_uint16_be command 1 payload_len;
+    Bytes.set_uint8 command 3 0x46;
+    Bytes.blit command 4 payload 0 payload_len;
+    Bytes.set_uint8 command (4 + Bytes.length payload) Message.sync_crc_eop;
     command
 
   and read_page page_size =
-    let command = Cstruct.create 5 in
-    Cstruct.set_uint8 command 0 Message.cmnd_stk_read_page;
-    Cstruct.BE.set_uint16 command 1 page_size;
-    Cstruct.set_uint8 command 3 0x46;
-    Cstruct.set_uint8 command 3 Message.sync_crc_eop;
+    let command = Bytes.create 5 in
+    Bytes.set_uint8 command 0 Message.cmnd_stk_read_page;
+    Bytes.set_uint16_be command 1 page_size;
+    Bytes.set_uint8 command 3 0x46;
+    Bytes.set_uint8 command 4 Message.sync_crc_eop;
     command
 end

@@ -1,3 +1,2 @@
 (library
- (public_name stk500)
- (libraries cstruct))
+ (public_name stk500))
