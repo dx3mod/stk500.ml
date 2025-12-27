@@ -1,4 +1,4 @@
-(** Minimal Stk500v1 implementation. *)
+(** The implementation of the first version of the STK500 protocol. *)
 
 module Message = struct
   type t = int

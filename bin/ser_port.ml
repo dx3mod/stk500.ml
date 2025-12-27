@@ -21,7 +21,7 @@ let send_command_with_expected ~expected (ic, oc) command =
   | None -> raise Not_response
   | Some response ->
       let response = Bytes.unsafe_of_string response
-      and expected = Stk500.V1.bytes_of_array expected in
+      and expected = Utils.bytes_of_array expected in
       if response <> expected then
         raise (Unexpected_response { expected; got = response })
 

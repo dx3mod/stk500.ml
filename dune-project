@@ -15,8 +15,7 @@
 
 (package
  (name stk500)
- (synopsis "Stk500 programmer")
- ;  (description "A longer description")
+ (synopsis "Stk500 protocol implementation")
  (depends ocaml)
  (tags
   (embedded avr programmer)))
